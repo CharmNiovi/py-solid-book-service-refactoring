@@ -38,22 +38,26 @@ class Book(ConsoleBook, ReverseBook, SerializeBook):
         self.title = title
         self.content = content
 
-    def chose_method(self, cmd: str, method_type: str):
-        i = self.get_spicific_method(cmd, method_type)
-        if i:
-            return getattr(self, i[0])()
+    def choose_method(self, cmd: str, method_type: str):
+        method_name = self.get_specific_method(cmd, method_type)
+        if method_name:
+            method = getattr(self, method_name)
+            return method()
         raise ValueError(f"Unknown {cmd} type: {method_type}")
 
     @classmethod
-    def get_spicific_method(cls, cmd: str, method_type: str) -> list:
-        return [i for i in dir(cls) if cmd in i and method_type in i]
+    def get_specific_method(cls, cmd: str, method_type: str) -> str:
+        for method_name in dir(cls):
+            if cmd in method_name and method_type in method_name:
+                return method_name
+        return ""
 
 
 def main(book: Book, commands: list[tuple[str, str]]) -> None | str:
     for cmd, method_type in commands:
-        i = book.chose_method(cmd, method_type)
-        if i:
-            return i
+        result = book.choose_method(cmd, method_type)
+        if result:
+            return result
 
 
 if __name__ == "__main__":
