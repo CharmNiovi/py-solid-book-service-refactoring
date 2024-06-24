@@ -1,30 +1,30 @@
 import json
-import xml.etree.ElementTree as ET
+import xml.etree.ElementTree as ET # NOQA N817
 
 
 class ConsoleBook:
-    def display_console(self):
+    def display_console(self) -> None:
         print(self.content)
 
-    def print_console(self):
+    def print_console(self) -> None:
         print(f"Printing the book: {self.title}...")
         print(self.content)
 
 
 class ReverseBook:
-    def print_reverse(self):
+    def print_reverse(self) -> None:
         print(f"Printing the book in reverse: {self.title}...")
         print(self.content[::-1])
 
-    def display_reverse(self):
+    def display_reverse(self) -> None:
         print(self.content[::-1])
 
 
 class SerializeBook:
-    def serialize_json(self):
+    def serialize_json(self) -> str:
         return json.dumps({"title": self.title, "content": self.content})
 
-    def serialize_xml(self):
+    def serialize_xml(self) -> str:
         root = ET.Element("book")
         title = ET.SubElement(root, "title")
         title.text = self.title
@@ -34,11 +34,11 @@ class SerializeBook:
 
 
 class Book(ConsoleBook, ReverseBook, SerializeBook):
-    def __init__(self, title: str, content: str):
+    def __init__(self, title: str, content: str) -> None:
         self.title = title
         self.content = content
 
-    def choose_method(self, cmd: str, method_type: str):
+    def choose_method(self, cmd: str, method_type: str) -> str:
         method_name = self.get_specific_method(cmd, method_type)
         if method_name:
             method = getattr(self, method_name)
